@@ -1,0 +1,24 @@
+TRABALHO IA B2: ONDE BATER O PÊNALTI?
+RA usado no trabalho.py: 2024014346
+Dupla: Lucas Fagundes e João Biankati
+
+Respondam com os números do RA de vocês (estão no resultados.txt).
+
+1. A matriz
+No conjunto de teste, o modelo que sempre diz gol obteve: VP 0, FP 0, FN 59 e VN 141. Portanto, acertou 141 de 200 pênaltis (70,5%), errando todos os 59 penaltis que foram defesa.
+
+2. A reta
+Com os dados normalizados pela régua, a regressão logística treinada com taxa 0,05 e 200 rodadas encontrou os pesos [0,471078; -2,472991; -0,216993]. A reta tem a forma 0,471078 × lado normalizado - 2,472991 × altura normalizada - 0,216993. No teste, acertou 125 de 200 (62,5%): VP 4, FP 20, FN 55 e VN 121.
+
+3. A régua
+A régua do conjunto de treino ficou [(15, 717), (10, 228)]: lado entre 15 cm e 717 cm e altura entre 10 cm e 228 cm. Esses pares foram usados para normalizar as entradas dos modelos treinados com régua.
+
+4. A pessoa e o genético
+Nós escolhemos os números fuzzy [576, 205, 242]. Esse modelo acertou 150 de 200 penaltis no teste (75,0%): VP 51, FP 42, FN 8 e VN 99. O algoritmo genético encontrou [609, 185, 455] e acertou 163 de 200 (81,5%): VP 53, FP 31, FN 6 e VN 110. Assim, o modelo genético foi melhor do que a escolha humana.
+
+5. KNN, rede e CNN
+O KNN com k = 7 acertou 173 de 200 (86,5%): VP 52, FP 20, FN 7 e VN 121. A rede neural com 4 neuronios escondidos acertou 175 de 200 (87,5%): VP 47, FP 13, FN 12 e VN 128. A rede teve mais acertos, maior precisao (78,3% contra 72,2%) e menos falsos positivos (13 contra 20), embora tenha recall um pouco menor (79,7% contra 88,1%). Não foi implementado um modelo CNN nesta tarefa.
+
+6. O conselho
+Eu aconselharia o clube a usar a rede neural com 4 neuronios escondidos, pois ela obteve o melhor desempenho no teste: 175 acertos em 200 (87,5%). O KNN é uma alternativa muito próxima, com 173 acertos (86,5%), mas a rede apresentou melhor precisao e menos falsos positivos. Como uma defesa difícil pode ser mais importante que um gol previsto erroneamente, a rede neural é a melhor opção entre os modelos apresentados.
+
