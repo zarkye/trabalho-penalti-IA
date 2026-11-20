@@ -88,14 +88,14 @@ def matriz(chances, certos, limiar):
 
         if chance >= limiar:
             if certo == 1:
-                vp = vp + 1
+                vp += 1
             else:
-                fp = fp + 1
+                fp += 1
         else:
             if certo == 1:
-                fn = fn + 1
+                fn += 1
             else:
-                vn = vn + 1
+                vn += 1
 
     return vp, fp, fn, vn
 
@@ -139,8 +139,8 @@ def fuzzy(lado, altura, n):
     for regra in regras:
         forca = regra[0]
         saida = regra[1]
-        soma_forcas = soma_forcas + forca
-        soma_ponderada = soma_ponderada + forca * saida
+        soma_forcas += forca
+        soma_ponderada += forca * saida
 
     if soma_forcas == 0:
         return 0
@@ -176,7 +176,7 @@ def nota(n, pontos):
             disse = 0
 
         if disse == certo:
-            certos = certos + 1
+            certos += 1
 
     return certos
 
@@ -213,7 +213,7 @@ def distancia(a, b):
 
     for i in range(len(a)):
         diferenca = abs(a[i] - b[i])
-        total = total + diferenca
+        total += diferenca
 
     return total
 
@@ -249,7 +249,7 @@ def knn(entradas, treino, k):
     defesas = 0
     for vizinho in vizinhos:
         certo = vizinho[1]
-        defesas = defesas + certo
+        defesas += certo
 
     return defesas / k
 

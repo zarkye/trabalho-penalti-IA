@@ -1,24 +1,58 @@
 TRABALHO IA B2: ONDE BATER O PÊNALTI?
-RA usado no trabalho.py: 2024014346
+RA usado no trabalho.py: 2024014377
 Dupla: Lucas Fagundes e João Biankati
 
 Respondam com os números do RA de vocês (estão no resultados.txt).
 
 1. A matriz
-No conjunto de teste, o modelo que sempre diz gol obteve: VP 0, FP 0, FN 59 e VN 141. Portanto, acertou 141 de 200 pênaltis (70,5%), errando todos os 59 penaltis que foram defesa.
+Escolhemos o KNN para a conta. Na matriz dele no conjunto de teste: VP = 36, FP = 6, FN = 6 e VN = 152.
+
+Precisão = VP / (VP + FP) = 36 / (36 + 6) = 36/42 = 0,857 = 85,7%.
+Isso significa: dos 42 chutes em que o KNN disse que o goleiro pega, ele acertou em 36.
+
+Recall = VP / (VP + FN) = 36 / (36 + 6) = 36/42 = 0,857 = 85,7%.
+Isso significa: dos 42 chutes que realmente foram defesa, o KNN encontrou 36.
+
+A matriz separa os acertos e os erros em pênaltis: VP é defesa prevista como defesa, FP é gol previsto como defesa, FN é defesa prevista como gol e VN é gol previsto como gol.
+
+O “sempre gol” acerta muito porque a maioria dos chutes do teste é gol: são 158 gols e 42 defesas. Assim, ele acerta 158 de 200, ou seja, 79%, apenas dizendo sempre gol. Porém, ele erra todas as 42 defesas: FN = 42. Ele tem recall de 0% e não ajuda a prever onde o goleiro pode defender.
 
 2. A reta
-Com os dados normalizados pela régua, a regressão logística treinada com taxa 0,05 e 200 rodadas encontrou os pesos [0,471078; -2,472991; -0,216993]. A reta tem a forma 0,471078 × lado normalizado - 2,472991 × altura normalizada - 0,216993. No teste, acertou 125 de 200 (62,5%): VP 4, FP 20, FN 55 e VN 121.
+Na regressão logística, o modelo aprende uma reta separadora. Nos dados deste RA, ela dividiu o gol de um jeito parecido com o “sempre gol”: acabou dizendo gol em quase todos os 200 chutes e acertou apenas 158, ficando igual ao “sempre gol”. Não houve VP nem FP na tabela dela.
+
+Olhando os dois gols da tela, a reta trata lado e altura como uma combinação em linha reta. Ela consegue cortar o gol apenas com um limite reto. Como existem áreas curvas e misturadas de defesa e gol, esse limite não acompanha bem o formato real das chances de defesa. Por isso, ela não passa do “sempre gol” neste conjunto.
+
+Na rede neural, os 4 neurônios escondidos criam limites curvos que podem se juntar. A rede conseguiu acertar 189 de 200 no teste. Comparando com a reta, ela encontrou áreas mais específicas de defesa e não ficou limitada a uma linha única.
 
 3. A régua
-A régua do conjunto de treino ficou [(15, 717), (10, 228)]: lado entre 15 cm e 717 cm e altura entre 10 cm e 228 cm. Esses pares foram usados para normalizar as entradas dos modelos treinados com régua.
+Sem a régua, rede neural sem a régua acertou só 158 de 200, o mesmo resultado do “sempre gol”. A régua muda cada posição para uma escala parecida: lado e altura passam a ficar entre aproximadamente 0 e 1. Assim, os dois números têm influência comparável no treino.
+
+Sem normalização, os pesos podem lidar mal com números de tamanhos diferentes. Neste trabalho, o lado varia até 717 cm e a altura até 228 cm. Isso faz a rede aprender de forma ruim ou ficar enviesada para o padrão de gols. A normalização não muda o chute; ela apenas coloca lado e altura na mesma escala.
+
+O fuzzy não precisa da régua porque trabalha diretamente em centímetros. Ele usa os três números de vocês ou do genético para calcular o nível de “meio” e “baixo” com triângulos. Por isso, os valores já são comparados na unidade correta do gol.
 
 4. A pessoa e o genético
-Nós escolhemos os números fuzzy [576, 205, 242]. Esse modelo acertou 150 de 200 penaltis no teste (75,0%): VP 51, FP 42, FN 8 e VN 99. O algoritmo genético encontrou [609, 185, 455] e acertou 163 de 200 (81,5%): VP 53, FP 31, FN 6 e VN 110. Assim, o modelo genético foi melhor do que a escolha humana.
+Os números escolhidos por nós foram [576, 205, 242]. Eles acertaram 158 de 200 chutes no teste.
+
+Os números do genético foram [157, 491, 457]. Eles acertaram 171 de 200. Portanto, neste RA, o genético acertou 13 pênaltis a mais que a nossa escolha.
+
+A rede aprende alterando seus pesos com a culpa de cada erro. Ela usa a diferença entre a chance prevista e o resultado verdadeiro para ajustar os neurônios.
+
+O genético não usa culpa. Ele começa com vários DNAs, chama o fuzzy em todos os penaltis de treino e dá nota pela quantidade de acertos. Depois, seleciona os melhores DNAs, cruza seus números e os muta. A melhoria vem da seleção dos números que acertam mais no treino.
 
 5. KNN, rede e CNN
-O KNN com k = 7 acertou 173 de 200 (86,5%): VP 52, FP 20, FN 7 e VN 121. A rede neural com 4 neuronios escondidos acertou 175 de 200 (87,5%): VP 47, FP 13, FN 12 e VN 128. A rede teve mais acertos, maior precisao (78,3% contra 72,2%) e menos falsos positivos (13 contra 20), embora tenha recall um pouco menor (79,7% contra 88,1%). Não foi implementado um modelo CNN nesta tarefa.
+O KNN não treina uma fórmula ou pesos. Quando chega um chute novo, ele mede a distância até os 400 pênaltis do treino, escolhe os 7 mais próximos e calcula a fração que foi defesa. Por isso, ele usa memória dos exemplos.
+
+A rede neural passa por uma fase de treino em que ajusta seus pesos com a culpa. Depois, para responder um chute novo, ela apenas calcula a ida pela rede. No teste deste RA, o KNN demorou cerca de 0,03 s e os demais modelos praticamente não apareceram no tempo medido (0,00 s). Assim, o KNN foi o que respondeu mais devagar, porque precisava procurar os vizinhos.
+
+Uma CNN não entra neste trabalho porque não estamos fornecendo imagens completas do gol. Os dados são apenas [lado, altura] de cada chute. A CNN é mais adequada a matrizes de pixels de imagens. Aqui, KNN, fuzzy, regressão logística e rede simples são suficientes.
 
 6. O conselho
-Eu aconselharia o clube a usar a rede neural com 4 neuronios escondidos, pois ela obteve o melhor desempenho no teste: 175 acertos em 200 (87,5%). O KNN é uma alternativa muito próxima, com 173 acertos (86,5%), mas a rede apresentou melhor precisao e menos falsos positivos. Como uma defesa difícil pode ser mais importante que um gol previsto erroneamente, a rede neural é a melhor opção entre os modelos apresentados.
+Para o batedor, o FN dói mais.
+
+Um FN acontece quando o modelo diz “gol”, mas o goleiro defende: o batedor pode escolher esse lado achando que o goleiro não pega e acaba perdendo a chance. Um FP acontece quando o modelo diz “defesa”, mas o chute é gol: isso indica uma área onde o modelo confunde o jogador, mas o batedor pode usar essa informação para encontrar um bom lado.
+
+Nesta tarefa eu usaria a rede neural com 4 neurônios escondidos. Ela acertou 189 de 200 (94,5%), teve precisão de 83,0% e recall de 92,9%. O KNN acertou 188 de 200 (94,0%), mas a rede teve um acerto a mais e reduziu o FN para 3, contra 6 do KNN.
+
+Na tela dos gols, eu bateria longe das áreas vermelhas indicadas como defesa provável pela rede. Eu escolheria uma área pintada em verde ou com chance baixa de defesa, dando preferência ao lado que o modelo da rede apresenta como menos protegido. Na hora real do chute, o jogador também deve considerar o movimento do goleiro, mas este é o melhor modelo para seguir a partir dos dados apresentados.
 

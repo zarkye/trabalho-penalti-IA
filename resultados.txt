@@ -7,10 +7,10 @@
   modelo                        acerta        VP  FP  FN   VN  precis.  recall treino
   sempre gol                    158 (79,0%)    0   0  42  158       -    0,0%      -
   fuzzy, números de vocês       158 (79,0%)   39  39   3  119   50,0%   92,9%      -
-  fuzzy, números do genético    171 (85,5%)   42  29   0  129   59,2%  100,0%  0,5 s
+  fuzzy, números do genético    171 (85,5%)   42  29   0  129   59,2%  100,0%  0,6 s
   KNN (k = 7)                   188 (94,0%)   36   6   6  152   85,7%   85,7%      -
   regressão logística           158 (79,0%)    0   0  42  158       -    0,0%  0,0 s
-  rede neural (4 escondidos)    189 (94,5%)   39   8   3  150   83,0%   92,9%  0,4 s
+  rede neural (4 escondidos)    189 (94,5%)   39   8   3  150   83,0%   92,9%  0,5 s
   rede neural sem a régua       158 (79,0%)    0   0  42  158       -    0,0%      -
 
   Os números do genético: [157, 491, 457] (os de vocês: [576, 205, 242]).
